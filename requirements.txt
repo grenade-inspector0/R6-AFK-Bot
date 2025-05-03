@@ -1,0 +1,8 @@
+pillow
+psutil
+pywin32
+keyboard
+PyInstaller
+pytesseract
+PyDirectInput
+opencv-python
