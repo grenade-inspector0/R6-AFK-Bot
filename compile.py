@@ -10,7 +10,7 @@ def compile_code(EXE_NAME="DEFAULT_NAME"):
     '--clean',
     '--icon=assets/AFK_Bot.ico',
     f"--add-data={os.path.abspath("assets")};assets",
-    "main.py"
+    "src/main.py"
 ]   
 
     # Delete the old exe if it exits
