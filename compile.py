@@ -9,6 +9,7 @@ def compile_code(EXE_NAME="DEFAULT_NAME"):
     '--console',
     '--clean',
     '--icon=assets/AFK_Bot.ico',
+    f"--add-data={os.path.abspath("src")};src",
     f"--add-data={os.path.abspath("assets")};assets",
     "src/main.py"
 ]   

@@ -1,5 +1,5 @@
 import random
-from __init__ import get_file_path
+from src.__init__ import get_file_path
 
 last_dk_key = None
 coord_range = {"maximum_x": 1000, "maximum_y": 1000}

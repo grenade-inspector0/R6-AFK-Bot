@@ -3,9 +3,9 @@ import ctypes
 import random
 import keyboard
 import pydirectinput
-from active import ActiveManager
-from randomness import get_random_time
-from screen import get_res_scale_x, get_res_scale_y
+from src.active import ActiveManager
+from src.randomness import get_random_time
+from src.screen import get_res_scale_x, get_res_scale_y
 
 win32 = ctypes.windll.user32
 pydirectinput.FAILSAFE = False

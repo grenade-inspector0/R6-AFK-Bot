@@ -1,0 +1,11 @@
+{
+    "Text_Chat_Messages": {
+        "enabled": false,
+        "all_chat_key": "t",
+        "num_of_messages": 1
+    },
+
+    "Advanced": {
+        "siege_path": "default"
+    }
+}

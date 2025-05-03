@@ -5,12 +5,12 @@ import psutil
 import random
 import keyboard
 import threading
-from active import ActiveManager
-from mnk import MouseAndKeyboard
-from utils import Start_Siege, __CONFIG
-from __init__ import change_title, clean_exit, get_file_path
-from screen import SCREEN_WIDTH, SCREEN_HEIGHT, detect_state
-from randomness import get_actions, get_coord, get_direction, get_messages, get_random_time
+from src.active import ActiveManager
+from src.mnk import MouseAndKeyboard
+from src.utils import Start_Siege, __CONFIG
+from src.__init__ import change_title, clean_exit, get_file_path
+from src.screen import SCREEN_WIDTH, SCREEN_HEIGHT, detect_state
+from src.randomness import get_actions, get_coord, get_direction, get_messages, get_random_time
 
 VERSION = 3.0
 

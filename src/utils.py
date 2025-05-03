@@ -2,13 +2,13 @@ import os
 import json
 import time
 import ctypes
-from screen import detect_state
-from active import SIEGE_WINDOW_NAMES
-from __init__ import clean_exit, get_file_path
+from src.screen import detect_state
+from src.active import SIEGE_WINDOW_NAMES
+from src.__init__ import clean_exit, get_file_path
 
 class Config:
     def __init__(self):
-        self.default_config = json.load(open(get_file_path("assets/config.json"), "r"))
+        self.default_config = json.load(open(get_file_path("assets/default_config.json"), "r"))
     
     def get_config(self):
         if not os.path.exists("./config.json"):
