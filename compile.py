@@ -1,5 +1,6 @@
 import os
 import shutil
+import PyInstaller.__main__ as pyinstaller
 
 def compile_code(EXE_NAME="DEFAULT_NAME"):
     args = [
