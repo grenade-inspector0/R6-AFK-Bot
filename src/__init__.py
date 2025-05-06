@@ -1,10 +1,6 @@
 import os
 import sys
 import time
-import ctypes
-
-def change_title(title):
-    ctypes.windll.kernel32.SetConsoleTitleW(title)
 
 def clean_exit(exit_reason):
     if os.path.exists(f"{os.environ.get('TEMP')}\\temp.png"):

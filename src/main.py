@@ -8,7 +8,7 @@ import threading
 from src.active import ActiveManager
 from src.mnk import MouseAndKeyboard
 from src.utils import Start_Siege, __CONFIG
-from src.__init__ import change_title, clean_exit, get_file_path
+from src.__init__ import clean_exit, get_file_path
 from src.screen import SCREEN_WIDTH, SCREEN_HEIGHT, detect_state
 from src.randomness import get_actions, get_coord, get_direction, get_messages, get_random_time
 
@@ -164,7 +164,6 @@ def __on_press():
             last_level_check = time.time()
         if last_crash_detection == None:
             last_crash_detection = time.time()
-        change_title("R6 AFK Bot | ACTIVATED")
         print("Activated.")
     else:
         __THREADS.stop()
@@ -173,12 +172,11 @@ def __on_press():
         last_message = None
         last_level_check = None
         last_crash_detection = None
-        change_title("R6 AFK Bot | DEACTIVATED")
         print("Deactivated.")
 
 if __name__ == "__main__":
     os.system("cls")
-    change_title(f"R6 AFK Bot v{VERSION}")
+    ctypes.windll.kernel32.SetConsoleTitleW(f"R6 AFK Bot v{VERSION}")
 
     # Create the config file if it doesn't exist
     if not os.path.exists("./config.json"):
@@ -195,10 +193,11 @@ if __name__ == "__main__":
             os.system(f"{get_file_path("assets/tesseract-installer.exe")} /S")
             os.environ["PATH"] += os.pathsep + "C:/Program Files/Tesseract-OCR"
             input("[SUCCESS] Successfully installed Tesseract OCR!\n\nPress Enter to continue...") 
+            os.system("cls")
         except:
             clean_exit("[ERROR] Failed to install Tesseract OCR... Run the R6 AFK Bot to attempt the install again. If it still fails, manually download the installer from https://github.com/UB-Mannheim/tesseract/wiki, while leaving everything as default.")
 
-    print(f'v{VERSION}') # App version goes here, add later
+    print(f'v{VERSION}')
     print(f'Resolution: {SCREEN_WIDTH}x{SCREEN_HEIGHT}')
 
     keyboard.add_hotkey(hotkey='f2', callback=__on_press, suppress=True)

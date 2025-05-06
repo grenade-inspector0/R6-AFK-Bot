@@ -39,10 +39,11 @@ class Config:
             elif not isinstance(config_value, type(default_value)):
                 errors.append(f"Type mismatch at {path}.{key}: expected {type(default_value).__name__}, got {type(config_value).__name__}")
         
-        # Verify the siege_path variable actually exists and isn't the word: "default"
-        if config["Advanced"]["siege_path"] != "default" and not os.path.exists(config["Advanced"]["siege_path"]):
-            errors.append("Invalid Siege Path.")
-        elif not config["Advanced"]["siege_path"].endswith(".exe"):
+        if config["Advanced"]["siege_path"] == "default":
+            config["Advanced"]["siege_path"] = f"{os.getenv('ProgramFiles(x86)')}\\Ubisoft\\Ubisoft Game launcher\\games\\Tom Clancy's Rainbow Six Siege\\RainbowSix.exe"
+
+        # Verify the siege_path variable actually exists and ends with .exe
+        if not os.path.exists(config["Advanced"]["siege_path"]) or not config["Advanced"]["siege_path"].endswith(".exe"):
             errors.append("Invalid Siege Path.")
 
         if errors:
@@ -60,12 +61,7 @@ class Config:
             json.dump(self.default_config, f, indent=5)
     
 def Start_Siege(active, mnk):
-    # Find the user's siege path
-    if __CONFIG.get_config()["Advanced"]["siege_path"] == "default":
-        SIEGE_PATH = f"{os.getenv('ProgramFiles(x86)')}\\Ubisoft\\Ubisoft Game launcher\\games\\Tom Clancy's Rainbow Six Siege\\RainbowSix.exe"
-    else:
-        SIEGE_PATH = __CONFIG.get_config()["Advanced"]["siege_path"]
-    os.system(f'start /MAX "" "{SIEGE_PATH}"')
+    os.system(f'start /MAX "" "{__CONFIG.get_config()["Advanced"]["siege_path"]}"')
     start_time = time.time()
     while True:
         if time.time() >= (start_time + 1800): # After 30 minutes have passed, then exit, this is to ensure the AFK Bot from breaking.
