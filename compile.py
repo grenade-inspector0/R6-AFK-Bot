@@ -2,7 +2,7 @@ import os
 import shutil
 import PyInstaller.__main__ as pyinstaller
 
-def compile_code(EXE_NAME="DEFAULT_NAME"):
+def compile_code(EXE_NAME="R6_AFK_Bot"):
     args = [
     f"--name={EXE_NAME}",
     '--onefile',
