@@ -27,7 +27,9 @@
     - "num_of_messages" : The number of messages the R6 AFK Bot will type every time it's time to type.
 - Advanced
     - "siege_path" : The path the crash detection will run if and when your game crashes.
-       - Should be the file called, "RainbowSix.exe", where your game's installed at.
+       - Should be the path to the file called, "RainbowSix.exe", where your game's installed at.
+    - "use_old_messages" : Will enable the use of the old positive message system.
+        - Type, "true" to enable, and "false" to use the new message system. 
 
 # IMPORTANT
 1. Widescreen monitors are **NOT** supported. The only way to use a widescreen monitor with my program is to open Nvidia Control Panel and set your resolution to 1920x1080. 
@@ -39,6 +41,12 @@
     2. Queue for your target gamemode, then stop the queue.
     3. Follow step 5 of the Quick Setup section.
 4. I probably won't provide any support here, but if you need support then join our [Discord](https://discord.gg/banworld "Banworld") and @ grenade_inspector.
+
+# FAQ
+- Why isn't there a wide variety of messages that the R6 AFK Bot will type?
+     - Ubisoft has changed how positive reputation units are awarded with the full release of the reputation system. (As of Y10 S1)
+     - Meaning, that's it's not efficient for the R6 AFK Bot to type messages like this. While I haven't figured out how it works 100%, it seems that they've changed it to only whitelist a few certain messages.
+     - So, if you want a wider variety of messages then enable, "use_old_messages", but be warned you **PROBABLY WON'T** earn positive units with the old system.
 
 # Credits
 - [Verybannable](https://github.com/VeryBannable)
