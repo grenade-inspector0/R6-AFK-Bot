@@ -1,0 +1,63 @@
+import os
+import json
+import time
+import ctypes
+from src.screen import detect_state
+from src.active import SIEGE_WINDOW_NAMES
+from src.__init__ import clean_exit, get_file_path
+
+class Config:
+    def __init__(self):
+        self.default_config = json.load(open(get_file_path("assets/default_config.json"), "r"))
+    
+    def get_config(self):
+        if not os.path.exists("./config.json"):
+            self.create_config()
+        with open("./config.json", "r") as f:
+            config = json.load(f)
+        self.check_config(config, self.default_config)
+        return config
+
+    def check_config(config, default, path="root"):
+        errors = []
+        if not isinstance(config, dict) or not isinstance(default, dict):
+            return [f"Type mismatch at {path}: expected {type(default).__name__}, got {type(config).__name__}"]
+        
+        for key, default_value in default.items():
+            if key not in config:
+                errors.append(f"Missing key at {path}.{key}")
+                continue
+            
+            config_value = config[key]
+            if isinstance(default_value, dict):
+                errors.extend(check_config(config_value, default_value, f"{path}.{key}"))
+            elif isinstance(default_value, list):
+                if not isinstance(config_value, list):
+                    errors.append(f"Type mismatch at {path}.{key}: expected list, got {type(config_value).__name__}")
+                elif config_value and not all(isinstance(i, type(default_value[0])) for i in config_value):
+                    errors.append(f"List element type mismatch at {path}.{key}")
+            elif not isinstance(config_value, type(default_value)):
+                errors.append(f"Type mismatch at {path}.{key}: expected {type(default_value).__name__}, got {type(config_value).__name__}")
+        
+        if config["Advanced"]["siege_path"] == "default":
+            config["Advanced"]["siege_path"] = f"{os.getenv('ProgramFiles(x86)')}\\Ubisoft\\Ubisoft Game launcher\\games\\Tom Clancy's Rainbow Six Siege\\RainbowSix.exe"
+
+        # Verify the siege_path variable actually exists and ends with .exe
+        if not os.path.exists(config["Advanced"]["siege_path"]) or not config["Advanced"]["siege_path"].endswith(".exe"):
+            errors.append("Invalid Siege Path.")
+
+        if errors:
+            # Check if the error is only an invalid siege path, if so, exit, while telling the user that the path is wrong, otherwise delete the old config
+            if len(errors) == 1 and errors[0] == "Invalid Siege Path.":
+                clean_exit("[ERROR] Config Check Failed.\nInvalid Siege Path, please input a valid path, then run the R6 AFK Bot again.")
+            else:
+                self.create_config()
+                clean_exit("[ERROR] Config Check Failed.\nDeleting Old Config File...\nCreating new Config File...\n\nSuccessfully created new Config File!")
+        
+        return
+        
+    def create_config(self):
+        with open("./config.json", "w") as f:
+            json.dump(self.default_config, f, indent=5)
+
+__CONFIG = Config()
