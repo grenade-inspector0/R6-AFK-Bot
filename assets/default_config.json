@@ -6,6 +6,7 @@
     },
 
     "Advanced": {
-        "siege_path": "default"
+        "siege_path": "default",
+        "use_old_messages": false
     }
 }

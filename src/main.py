@@ -5,10 +5,10 @@ import psutil
 import random
 import keyboard
 import threading
+from src.config import __CONFIG
 from src.active import ActiveManager
 from src.mnk import MouseAndKeyboard
-from src.utils import Start_Siege, __CONFIG
-from src.__init__ import clean_exit, get_file_path
+from src.__init__ import clean_exit, get_file_path, start_siege
 from src.screen import SCREEN_WIDTH, SCREEN_HEIGHT, detect_state
 from src.randomness import get_actions, get_coord, get_direction, get_messages, get_random_time
 
@@ -37,14 +37,14 @@ def AFK_Bot():
         active = __ACTIVE
         state = detect_state(active, __MNK)
 
-        # CRASH PREVENTION FEATURE
+        # CRASH PREVENTION
         if time.time() > (last_crash_detection + 60): # Every minute check to see if the game has crashed
             for proc in psutil.process_iter(['pid', 'name']):
                 for name in ["RainbowSix.exe"]:
                     if proc.info['name'].lower() == name.lower():
                         CRASH_DETECTED = False
                         break
-            Start_Siege(active, __MNK) if CRASH_DETECTED else "" # Start the game if a Crash is detected
+            start_siege(active, __MNK) if CRASH_DETECTED else "" # Start the game if a Crash is detected
             CRASH_DETECTED = True
         
         if state["banned"]:
@@ -103,28 +103,29 @@ def AFK_Bot():
 
                 time.sleep(get_random_time(0.8, 1.2))
 
-            if __CONFIG.get_config()["Text_Chat_Messages"]["enabled"]: # TEXT CHAT MESSAGING FEATURE
-                if time.time() > (last_message + random.randint(300, 420)): # every <= 5-7 minutes (DEFAULT VALUE) the bot has a chance to send a message
+            if __CONFIG.get_config()["Text_Chat_Messages"]["enabled"]:
+                if time.time() > (last_message + random.randint(300, 420)): # every <= 5-7 minutes (DEFAULT VALUE) the bot has a chance to send (a) message(s)
                     num = __CONFIG.get_config()["Text_Chat_Messages"]["num_of_messages"]
-                    messages = get_messages(num=num)
+                    use_old_system = __CONFIG.get_config()["Advanced"]["use_old_messages"]
+                    messages = get_messages(num=num, use_old_messages=use_old_system)
                     for message in messages:
                         __MNK.send_text(active, text=message, all_chat_key=__CONFIG.get_config()["Text_Chat_Messages"]["all_chat_key"])
                         time.sleep(get_random_time(1.5, 2.5))
                     last_message = time.time()
 
-        elif state["end_of_game"]: # SQUAD SUPPORT FEATURE
+        elif state["end_of_game"]:
             if state["squad_leader"]:
-                # press new match with squad if found to be in a squad as the squad leader
+                # Press new match with squad if found to be in a squad as the squad leader
                 __MNK.select_button(active, x_coord=1652, y_coord=1023, sleep_range=(3.5, 4.5))
                 __MNK.select_button(active, x_coord=736, y_coord=985)
             elif state["ready_up"]:
-                # press ready up if found to be in a squad, but not the squad leader
+                # Press ready up if found to be in a squad, but not the squad leader
                 __MNK.select_button(active, x_coord=1677, y_coord=1027)
                 # move mouse randomly until in a game
                 for x in range(random.randint(5, 10)):
                     __MNK.move_mouse(active, x=get_coord(coord_type="x"), y=get_coord(coord_type="y"))
             else:
-                # press find another match if found to not be in a squad
+                # Press find another match if found to not be in a squad
                 __MNK.select_button(active, x_coord=1370, y_coord=1026)
 
         if __ACTIVE.user_active():

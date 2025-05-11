@@ -1,5 +1,5 @@
 import random
-from src.__init__ import get_file_path
+from src.__init__ import get_file_path, KNOWN_POSITIVE_MESSAGES
 
 last_dk_key = None
 coord_range = {"maximum_x": 1000, "maximum_y": 1000}
@@ -32,10 +32,16 @@ def get_direction():
     last_dk_key = key
     return key
 
-def get_messages(num=3):
+def get_messages(num=1, use_old_messages=False):
     messages = []
-    with open(get_file_path("assets/messages.txt"), 'r') as file:
-        positive_messages = [line.strip() for line in file.readlines()]
+    # Select the positive messages to choose from
+    if use_old_messages:
+        with open(get_file_path("assets/messages.txt"), 'r') as file:
+            positive_messages = [line.strip() for line in file.readlines()]
+    else:
+        positive_messages = KNOWN_POSITIVE_MESSAGES
+    
+    # Randomly selected the inputted number of messages
     while len(messages) < num:
         new_message = random.choice(positive_messages)
         if new_message not in messages:
