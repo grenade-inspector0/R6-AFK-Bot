@@ -1,5 +1,5 @@
 import random
-from src.__init__ import get_file_path, KNOWN_POSITIVE_MESSAGES
+from src.__init__ import get_file_path, POSITIVE_MESSAGES
 
 last_dk_key = None
 coord_range = {"maximum_x": 1000, "maximum_y": 1000}
@@ -39,7 +39,7 @@ def get_messages(num=1, use_old_messages=False):
         with open(get_file_path("assets/messages.txt"), 'r') as file:
             positive_messages = [line.strip() for line in file.readlines()]
     else:
-        positive_messages = KNOWN_POSITIVE_MESSAGES
+        positive_messages = POSITIVE_MESSAGES
     
     # Randomly selected the inputted number of messages
     while len(messages) < num:

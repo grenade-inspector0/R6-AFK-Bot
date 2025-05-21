@@ -8,7 +8,7 @@ import threading
 from src.config import __CONFIG
 from src.active import ActiveManager
 from src.mnk import MouseAndKeyboard
-from src.__init__ import clean_exit, get_file_path, start_siege
+from src.__init__ import clean_exit, get_file_path
 from src.screen import SCREEN_WIDTH, SCREEN_HEIGHT, detect_state
 from src.randomness import get_actions, get_coord, get_direction, get_messages, get_random_time
 
@@ -25,6 +25,24 @@ last_level_check = None
 last_crash_detection = None
 
 CRASH_DETECTED = True
+
+def start_siege(active, mnk):
+    os.system(f'start /MAX "" "{__CONFIG.get_config()["Advanced"]["siege_path"]}"')
+    start_time = time.time()
+    while True:
+        if time.time() >= (start_time + 1800): # After 30 minutes have passed, then exit, this is to keep the AFK Bot from breaking.
+            clean_exit("[ERROR] R6 AFK Bot failed to restart siege, manual intervention needed.")
+        current_state = detect_state(__ACTIVE, __MNK)
+        current_state = [current_state["in_lobby"], current_state["reconnect"], current_state["popup"][0]]
+        if True in current_state:
+            # Maximize the game, then return
+            for title in SIEGE_WINDOW_NAMES:
+                user32 = ctypes.WinDLL('user32')
+                hwnd = user32.FindWindowW(None, window_title)
+                if hwnd:
+                    user32.ShowWindow(hwnd, 3)
+                    user32.SetForegroundWindow(hwnd)
+            break
 
 def AFK_Bot():
     """Run the inputs."""
@@ -44,7 +62,7 @@ def AFK_Bot():
                     if proc.info['name'].lower() == name.lower():
                         CRASH_DETECTED = False
                         break
-            start_siege(active, __MNK) if CRASH_DETECTED else "" # Start the game if a Crash is detected
+            start_siege() if CRASH_DETECTED else "" # Start the game if a Crash is detected
             CRASH_DETECTED = True
         
         if state["banned"]:
