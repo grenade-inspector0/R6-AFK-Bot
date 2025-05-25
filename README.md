@@ -1,12 +1,20 @@
+# R6 AFK Bot
+- What is this?
+    - This is an application for Rainbow Six Siege to farm levels, renown, improve reputation, or remove reputation related penalties.
+- How do I start using this?
+    - Follow the steps outlined in the "Quick Setup" section down below, or to compile it from source follow the "Advanced Setup" section.
+
 # Quick Setup
 1. Download the most latest release from [here](https://github.com/grenade-inspector0/R6-AFK-Bot/releases "Latest Releases Page").
 2. Move the .exe to it's own folder, you can name it whatever you want, but make sure it's in its own folder.
-3. Edit your in-game **display** settings to be the following:
+3. Edit your in-game **DISPLAY** settings to be the following:
    - Set your resolution to 1920x1080 (See "IMPORTANT" section below)
    - Set your game to windowed mode.
-   - Set your Menu Display Area to 100
+   - Set your "Menu Display Area" setting to 100
 4. Run the compiled .exe, which is called, "R6_AFK_Bot.exe".
-   - **NOTE**: You may have to run it twice due to the config being generated on the first run.
+   - **NOTES**:
+        - You may have to run it twice due to the config being generated on the first run.
+        - When it asks you to select "RainbowSix.exe" you must navigate to your siege install, then select the .exe for Siege, which will be called "RainbowSix.exe". This is for the crash detected, which will restart your game if it detects a crash while you're AFK Botting, this prevent sanctions and other things.
 5. While the game is running, press F2 and the R6 AFK Bot should start queueing.
    - **NOTE**: If you press F2 a 2nd time while the R6 AFK Bot is started, it will deactivate the bot and print "Deactivated" to the CMD Prompt Window.
 
@@ -50,6 +58,6 @@
 
 # Credits
 - [Verybannable](https://github.com/VeryBannable)
-    - The original code that this project was based upon. I ended editing / removing most of his code, but it's his base code at the heart, so he deserves some credit. 
+    - The original code that this project was based upon. I ended up editing / removing most of his code, but it's his base code at the heart, so he deserves some credit. 
 - [Tesseract](https://github.com/UB-Mannheim/tesseract/wiki)
     - The backbone of this project, used for the state detection of the R6 AFK Bot.
