@@ -26,7 +26,7 @@ last_crash_detection = None
 
 CRASH_DETECTED = True
 
-def start_siege(active, mnk):
+def start_siege():
     os.system(f'start /MAX "" "{__CONFIG.get_config()["Advanced"]["siege_path"]}"')
     start_time = time.time()
     while True:
