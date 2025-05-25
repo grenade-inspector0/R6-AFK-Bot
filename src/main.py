@@ -12,7 +12,7 @@ from src.__init__ import clean_exit, get_file_path
 from src.screen import SCREEN_WIDTH, SCREEN_HEIGHT, detect_state
 from src.randomness import get_actions, get_coord, get_direction, get_messages, get_random_time
 
-VERSION = 3.0
+VERSION = 3.2
 
 USER32 = ctypes.windll.user32
 USER32.SetProcessDPIAware()
@@ -51,7 +51,7 @@ def AFK_Bot():
     global last_level_check
     global last_crash_detection
     
-    while True:
+    while __ACTIVE.user_active():
         active = __ACTIVE
         state = detect_state(active, __MNK)
 
@@ -65,13 +65,11 @@ def AFK_Bot():
             start_siege() if CRASH_DETECTED else "" # Start the game if a Crash is detected
             CRASH_DETECTED = True
         
-        if state["banned"]:
+        if state["banned"] or state["sanctioned"]:
+            __ACTIVE.switch_active()
             __THREADS.stop()
-            clean_exit("Ban Detected.\nR6 AFK Bot Deactivated.")
-        
-        elif state["sanctioned"]:
-            __THREADS.stop()
-            clean_exit("Sanction Detected.\nR6 AFK Bot Deactivated.")
+            exit_type = "Ban" if state["banned"] else "Sanction"
+            clean_exit(f"{exit_type} Detected.\nR6 AFK Bot Deactivated.")
 
         elif state["popup"][0]:
             # Accept the popup depending on the type
@@ -146,11 +144,8 @@ def AFK_Bot():
                 # Press find another match if found to not be in a squad
                 __MNK.select_button(active, x_coord=1370, y_coord=1026)
 
-        if __ACTIVE.user_active():
-            time.sleep(get_random_time(2.5, 3.5)) # this sleep timer is mainly for older computers with worse graphics, but it's also useful for the state detection
-            CRASH_DETECTED = True # Reset the variable to make the Crash Prevention work.
-            continue
-        break
+        time.sleep(get_random_time(2.5, 3.5)) # this sleep timer is mainly for older computers with worse graphics, but it's also useful for the state detection
+        CRASH_DETECTED = True # Reset the variable to make the Crash Prevention work.
 
 class Threads:
     def __init__(self) -> None:
@@ -227,4 +222,3 @@ if __name__ == "__main__":
             time.sleep(1)
         except KeyboardInterrupt:
             clean_exit("Thanks for using the R6 AFK Bot.")
-
