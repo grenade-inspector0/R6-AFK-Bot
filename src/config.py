@@ -2,14 +2,35 @@ import os
 import json
 import time
 import ctypes
+import tkinter as tk
+from tkinter import filedialog
 from src.screen import detect_state
 from src.active import SIEGE_WINDOW_NAMES
 from src.__init__ import clean_exit, get_file_path
 
+# Default Siege .exe Path - "C:\Program Files (x86)\Ubisoft\Ubisoft Game launcher\games\Tom Clancy's Rainbow Six Siege\RainbowSix.exe"
+
 class Config:
     def __init__(self):
         self.default_config = json.load(open(get_file_path("assets/default_config.json"), "r"))
+        self.default_siege_path = f"{os.getenv('ProgramFiles(x86)')}\\Ubisoft\\Ubisoft Game launcher\\games\\Tom Clancy's Rainbow Six Siege\\RainbowSix.exe"
     
+    def get_siege_path(self):
+        root = tk.Tk()
+        root.withdraw()
+        siege_path = filedialog.askopenfilename(
+            title="Select RainbowSix.exe",
+            initialdir="C:/Program Files (x86)/Ubisoft/Ubisoft Game launcher/games/Tom Clancy's Rainbow Six Siege",
+            filetypes=[("Executable files", "*.exe")]
+        )
+
+        if siege_path:
+            root.destroy()
+            return siege_path
+        else:
+            clean_exit("[ERROR] Failed to generate new config file.\nExiting...")
+            
+
     def get_config(self):
         if not os.path.exists("./config.json"):
             self.create_config()
@@ -38,9 +59,14 @@ class Config:
                     errors.append(f"List element type mismatch at {path}.{key}")
             elif not isinstance(config_value, type(default_value)):
                 errors.append(f"Type mismatch at {path}.{key}: expected {type(default_value).__name__}, got {type(config_value).__name__}")
-        
-        if config["Advanced"]["siege_path"] == "default":
-            config["Advanced"]["siege_path"] = f"{os.getenv('ProgramFiles(x86)')}\\Ubisoft\\Ubisoft Game launcher\\games\\Tom Clancy's Rainbow Six Siege\\RainbowSix.exe"
+
+        # Prevents issues from older versions
+        if config["Advanced"]["siege_path"].lower() == "default":
+            os.system("cls")
+            print("Older version detected, regenerating config.json...")
+            time.sleep(1.5)
+            self.create_config()
+            clean_exit("[DONE] Successfully regenerated config.json! Start the .exe again, and it should work! If this error persists, contact Support.")
 
         # Verify the siege_path variable actually exists and ends with .exe
         if not os.path.exists(config["Advanced"]["siege_path"]) or not config["Advanced"]["siege_path"].endswith(".exe"):
@@ -53,11 +79,13 @@ class Config:
             else:
                 self.create_config()
                 clean_exit("[ERROR] Config Check Failed.\nDeleting Old Config File...\nCreating new Config File...\n\nSuccessfully created new Config File!")
-        
         return
         
     def create_config(self):
+        config = self.default_config
+        config["Advanced"]["siege_path"] = self.default_siege_path if os.path.exists(self.default_siege_path) else self.get_siege_path()
+
         with open("./config.json", "w") as f:
-            json.dump(self.default_config, f, indent=5)
+            json.dump(config, f, indent=5)
 
 __CONFIG = Config()
