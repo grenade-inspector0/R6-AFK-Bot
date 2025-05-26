@@ -6,9 +6,9 @@ import random
 import keyboard
 import threading
 from src.config import __CONFIG
-from src.active import ActiveManager
 from src.mnk import MouseAndKeyboard
 from src.__init__ import clean_exit, get_file_path
+from src.active import ActiveManager, SIEGE_WINDOW_NAMES
 from src.screen import SCREEN_WIDTH, SCREEN_HEIGHT, detect_state
 from src.randomness import get_actions, get_coord, get_direction, get_messages, get_random_time
 
@@ -27,10 +27,16 @@ last_crash_detection = None
 CRASH_DETECTED = True
 
 def start_siege():
+    # Move the CMD Prompt window running the .exe / .py file to a specfic location; this prevents the R6 AFK Bot from not being able to detect that the game's reloaded
+    current_window = ctypes.windll.kernel32.GetConsoleWindow()
+    ctypes.windll.user32.MoveWindow(current_window, SCREEN_WIDTH-800, 0, 800, 600, True)
+
     os.system(f'start /MAX "" "{__CONFIG.get_config()["Advanced"]["siege_path"]}"')
     start_time = time.time()
     while True:
         if time.time() >= (start_time + 1800): # After 30 minutes have passed, then exit, this is to keep the AFK Bot from breaking.
+            __ACTIVE.switch_active()
+            __THREADS.stop()
             clean_exit("[ERROR] R6 AFK Bot failed to restart siege, manual intervention needed.")
         current_state = detect_state(__ACTIVE, __MNK)
         current_state = [current_state["in_lobby"], current_state["reconnect"], current_state["popup"][0]]
@@ -38,7 +44,7 @@ def start_siege():
             # Maximize the game, then return
             for title in SIEGE_WINDOW_NAMES:
                 user32 = ctypes.WinDLL('user32')
-                hwnd = user32.FindWindowW(None, window_title)
+                hwnd = user32.FindWindowW(None, title)
                 if hwnd:
                     user32.ShowWindow(hwnd, 3)
                     user32.SetForegroundWindow(hwnd)

@@ -5,7 +5,6 @@ import ctypes
 import tkinter as tk
 from tkinter import filedialog
 from src.screen import detect_state
-from src.active import SIEGE_WINDOW_NAMES
 from src.__init__ import clean_exit, get_file_path
 
 # Default Siege .exe Path - "C:\Program Files (x86)\Ubisoft\Ubisoft Game launcher\games\Tom Clancy's Rainbow Six Siege\RainbowSix.exe"
