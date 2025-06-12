@@ -9,7 +9,7 @@ Hello, the simple answer to what the future plans of this project is that I'll n
       - 1.) Rewrite the logic system to make it easier to update between manjor in-game menu changes.
       - 2.) Manually go through and re-record all past coords, while updating the keywords for each coord as well.
 
-     Either way it's annoying to do, and I personally wouldn't bother with it, especially #2. This is because my code might be a bit hard to understand at certain points, or the coords could be scattered and not in a central location as I had tried to do in the later versions. 
+     Either way it will be annoying to do, and I personally wouldn't bother with it, especially #2. This is because my code might be a bit hard to understand at certain points, or the coords could be scattered and not in a central location as I had tried to do in the later versions. 
 
 ## R6 AFK Bot
 - What is this?
