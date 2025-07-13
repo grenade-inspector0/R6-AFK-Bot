@@ -1,0 +1,42 @@
+-- Config Information --
+
+-----
+NOTE - When I say "true" or "false" in double quotes like this, in the terms of the config.json file it means true / false without double quotation marks.
+        - Ex: "enabled": "true"    <-- IS WRONG, it's     "enabled": true
+-----
+
+------------------------------
+
+
+-- Text Chat Messages --
+
+If you want the R6 AFK Bot to type messages in the in-game chat for you, then do the following:
+- Set the variable "enabled" under the category, "Text_Chat_Messages" to true (false to turn it back off)
+- Set the variable "all_chat_key" under the category, "Text_Chat_Messages" to your all chat key, the default is "t"
+- Set the variable "num_of_messages" under the category, "Text_Chat_Messages" to the number of messages you want the bot to send when it's time to send messages
+
+SIDE NOTE(s):
+--- If the interval between messages is too slow for you, then do this:
+        - Edit the variable "message_interval" under the category, "Advanced" like this: 
+            - The variable should be in the form of [x1, x2]; x1 will be the minimum time in minutes between each message, while x2 is the maximum time in minutes.
+
+--- If you want to use your own custom messages, or use a wider variety of "positive" messages, then do this:     (these messages don't guarantee positive units)
+    - Set the variable "limit_messages" under the category, "Advanced" to false (true to turn it back off)
+    
+    - FOR CUSTOM MESSAGES (ADVANCED USERS ONLY):
+        - You'll need to compile from source, and edit the file called "assets/messages.txt" with each line containing each message you want the R6 AFK Bot to send.
+
+
+------------------------------
+
+-- Mode Selection -- 
+
+If you want to queue for a specific mode, and not ONLY queue for your last played gamemode (the gamemode that says "play again"), then do the following:
+- Set the variable "enabled" under the category, "Mode_Selection" to true (false to turn it back off)
+- Set the variable "gamemode" under the category, "Mode_Selection" to one of the following (these aren't case sensitive):
+    - "Ranked" for the gamemode Ranked
+    - "Unranked" for the gamemode Unranked
+    - "Casual" for the gamemode Quick Match
+    - "Random" to randomly queue for one of the gamemodes (If you have "enabled" set to true, but have an invalid gamemode, then by default, it randomly queues)
+
+------------------------------
