@@ -5,8 +5,15 @@
         "num_of_messages": 1
     },
 
+    "Mode_Selection": {
+        "enabled": false,
+        "gamemode": "casual"
+    },
+
+
     "Advanced": {
         "siege_path": "default",
-        "use_old_messages": false
+        "message_interval": [5, 7],
+        "limit_messages": true
     }
 }
