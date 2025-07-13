@@ -2,6 +2,7 @@ import os
 import sys
 import time
 
+GAMEMODE_INDEXS = {"ranked": 3, "unranked": 4, "casual": 5}
 POSITIVE_MESSAGES = [
     "gr",
     "gg",

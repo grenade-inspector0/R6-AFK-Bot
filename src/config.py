@@ -71,6 +71,10 @@ class Config:
         if not os.path.exists(config["Advanced"]["siege_path"]) or not config["Advanced"]["siege_path"].endswith(".exe"):
             errors.append("Invalid Siege Path.")
 
+        # Verify the message interval
+        if len(config["Advanced"]["message_interval"]) > 2 or not all(isinstance(item, (int)) for item in config["Advanced"]["message_interval"]):
+            errors.append("Invalid Message Interval length")
+
         if errors:
             # Check if the error is only an invalid siege path, if so, exit, while telling the user that the path is wrong, otherwise delete the old config
             if len(errors) == 1 and errors[0] == "Invalid Siege Path.":

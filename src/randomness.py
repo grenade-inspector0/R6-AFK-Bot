@@ -4,11 +4,10 @@ from src.__init__ import get_file_path, POSITIVE_MESSAGES
 last_dk_key = None
 coord_range = {"maximum_x": 1000, "maximum_y": 1000}
 
-def get_actions(num_of_actions=None):
+def get_actions():
     actions = []
     last_action = None
-    num_actions = random.randint(5, 8) if num_of_actions is None else num_of_actions
-    for _ in range(num_actions):
+    for _ in range(random.randint(3, 8)):
         action_list = ["dk", "dk_shift", "mm", "mm_dk"]
         if last_action == "mm" and "mm" in action_list:
             action_list.remove("mm")
@@ -22,7 +21,7 @@ def get_actions(num_of_actions=None):
     return actions
 
 def get_coord(coord_type=None):
-    return random.randint(0, coord_range["maximum_x"]) if coord_type == "x" else random.randint(0, coord_range["maximum_y"])
+    return random.randint(1, coord_range["maximum_x"]) if coord_type == "x" else random.randint(1, coord_range["maximum_y"])
 
 def get_direction():
     global last_dk_key
@@ -32,20 +31,22 @@ def get_direction():
     last_dk_key = key
     return key
 
-def get_messages(num=1, use_old_messages=False):
+def get_messages(num=1, limit_messages=False):
     messages = []
     # Select the positive messages to choose from
-    if use_old_messages:
-        with open(get_file_path("assets/messages.txt"), 'r') as file:
-            positive_messages = [line.strip() for line in file.readlines()]
-    else:
+    if limit_messages:
         positive_messages = POSITIVE_MESSAGES
+    else:
+        positive_messages = [line.strip() for line in open(get_file_path("assets/messages.txt"), 'r').readlines()]
     
     # Randomly selected the inputted number of messages
-    while len(messages) < num:
+    error_count = 0
+    while len(messages) < num or error_count < 3:
         new_message = random.choice(positive_messages)
         if new_message not in messages:
             messages.append(new_message)
+            continue
+        error_count += 1
     return messages
 
 def get_random_time(start_range=0.3, end_range=0.5):

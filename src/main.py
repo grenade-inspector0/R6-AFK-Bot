@@ -7,12 +7,14 @@ import keyboard
 import threading
 from src.config import __CONFIG
 from src.mnk import MouseAndKeyboard
-from src.__init__ import clean_exit, get_file_path
-from src.active import ActiveManager, SIEGE_WINDOW_NAMES
-from src.screen import SCREEN_WIDTH, SCREEN_HEIGHT, detect_state
+from src.__init__ import GAMEMODE_INDEXS, clean_exit, get_file_path
+from src.active import SIEGE_WINDOW_NAMES, ActiveManager
+from src.screen import SCREEN_WIDTH, SCREEN_HEIGHT, button_coords, detect_state
 from src.randomness import get_actions, get_coord, get_direction, get_messages, get_random_time
 
-VERSION = 3.2
+
+
+VERSION = 3.3
 
 USER32 = ctypes.windll.user32
 USER32.SetProcessDPIAware()
@@ -59,44 +61,58 @@ def AFK_Bot():
     
     while __ACTIVE.user_active():
         active = __ACTIVE
-        state = detect_state(active, __MNK)
+        state = detect_state()
 
-        # CRASH PREVENTION
+        # CRASH DETECTION
         if time.time() > (last_crash_detection + 60): # Every minute check to see if the game has crashed
             for proc in psutil.process_iter(['pid', 'name']):
-                for name in ["RainbowSix.exe"]:
-                    if proc.info['name'].lower() == name.lower():
+                for name in SIEGE_WINDOW_NAMES:
+                    if proc.info['name'].lower() == "RainbowSix.exe".lower():
                         CRASH_DETECTED = False
                         break
             start_siege() if CRASH_DETECTED else "" # Start the game if a Crash is detected
-            CRASH_DETECTED = True
+            CRASH_DETECTED = True # Reset the variable to make the Crash Detection work.
         
         if state["banned"] or state["sanctioned"]:
+            # If the account is banned, then exit
             __ACTIVE.switch_active()
             __THREADS.stop()
-            exit_type = "Ban" if state["banned"] else "Sanction"
-            clean_exit(f"{exit_type} Detected.\nR6 AFK Bot Deactivated.")
+            clean_exit(f"Ban Detected.\nR6 AFK Bot Deactivated.")
+
+        elif state["sanctioned"]:
+            # If the account isn't banned, only sanctioned, then idle until the sanction is no longer detected
+            continue
 
         elif state["popup"][0]:
             # Accept the popup depending on the type
             if state["popup"][1] == "normal":
-                __MNK.select_button(active, x_coord=744, y_coord=946)
-            elif state["popup"][1] in ["badge", "reputation"]: # Badge or Reputation Drop popups
-                __MNK.select_button(active, x_coord=769, y_coord=987)
-            else: # For the special popup type
-                for _ in range(7):
-                    __MNK.select_button(active, x_coord=1612, y_coord=863) # Click the button 7 times to ensure that it removed the popup (there's mutliple clicks needed)
-                continue # Continue, and scan the screen again
+                __MNK.select_button(active, x_coord=button_coords["popups"][0][0], y_coord=button_coords["popups"][0][1])
+            else:
+                __MNK.select_button(active, x_coord=button_coords["popups"][1][0], y_coord=button_coords["popups"][1][1])
         
         elif state["reconnect"]:
             # reconnect to the game then sleep until in the game
-            __MNK.select_button(active, x_coord=482, y_coord=215, sleep_range=(15, 16))
+            __MNK.select_button(active, x_coord=button_coords["lobby"][1][0], y_coord=button_coords["lobby"][1][0], sleep_range=(15, 16))
         
         elif state["in_lobby"]:
             # move mouse to the main menu
-            __MNK.select_button(active, x_coord=132, y_coord=71, sleep_range=(4, 4.5))
-            # press play again
-            __MNK.select_button(active, x_coord=440, y_coord=213, sleep_range=(7.5, 7.6))
+            __MNK.select_button(active, x_coord=button_coords["lobby"][0][0], y_coord=button_coords["lobby"][0][1], sleep_range=(4, 4.5))
+
+            if not __CONFIG.get_config()["Mode_Selection"]["enabled"]:
+                # press play again
+                __MNK.select_button(active, x_coord=button_coords["lobby"][1][0], y_coord=button_coords["lobby"][1][0], sleep_range=(7.5, 7.6))
+                continue
+
+            # open the menu to select a gamemode
+            __MNK.select_button(active, x_coord=button_coords["lobby"][2][0], y_coord=button_coords["lobby"][2][0], sleep_range=(7.5, 7.6))
+
+            try:
+                index = GAMEMODE_INDEXS[__CONFIG.get_config()["Mode_Selection"]["gamemode"].lower().strip()]
+            except KeyError:
+                index = random.choice([i for n, i in GAMEMODE_INDEXS.items()])
+
+            # select the user's gamemode
+            __MNK.select_button(active, x_coord=button_coords["lobby"][index][0], y_coord=button_coords["lobby"][index][0], sleep_range=(7.5, 7.6))
 
         elif state["queueing"]:
             # move mouse randomly until in a game
@@ -104,7 +120,7 @@ def AFK_Bot():
                 __MNK.move_mouse(active, x=get_coord(coord_type="x"), y=get_coord(coord_type="y"))
             
         elif state["in_game"]:
-            action_list = get_actions(num_of_actions=random.randint(3, 5) if random.choice([1, 1, 1, 2]) == 1 else None)
+            action_list = get_actions()
 
             for action in action_list: 
                 match action:
@@ -115,43 +131,30 @@ def AFK_Bot():
                     case "mm": # mouse movement
                         __MNK.move_mouse(active, x=get_coord(coord_type="x"), y=get_coord(coord_type="y"))
                     case "mm_dk": # mouse movement + directional key
-                        match random.randint(1, 2):
-                            case 1:
-                                __MNK.keypress(active, key=get_direction(), duration=0)
-                                __MNK.move_mouse(active, x=get_coord(coord_type="x"), y=get_coord(coord_type="y"))
-                            case 2:
-                                __MNK.move_mouse(active, x=get_coord(coord_type="x"), y=get_coord(coord_type="y"))
-                                __MNK.keypress(active, key=get_direction(), duration=0)
+                        if random.randint(1, 2) == 1:
+                            __MNK.keypress(active, key=get_direction(), duration=0)
+                            __MNK.move_mouse(active, x=get_coord(coord_type="x"), y=get_coord(coord_type="y"))
+                        else:
+                            __MNK.move_mouse(active, x=get_coord(coord_type="x"), y=get_coord(coord_type="y"))
+                            __MNK.keypress(active, key=get_direction(), duration=0)
 
                 time.sleep(get_random_time(0.8, 1.2))
 
             if __CONFIG.get_config()["Text_Chat_Messages"]["enabled"]:
-                if time.time() > (last_message + random.randint(300, 420)): # every <= 5-7 minutes (DEFAULT VALUE) the bot has a chance to send (a) message(s)
+                message_interval = __CONFIG.get_config()["Advanced"]["message_interval"]
+                if time.time() > (last_message + random.randint((message_interval[0]*60), (message_interval[1]*60))): # every <= 5-7 minutes (DEFAULT VALUE) the bot has a chance to send 1+ message(s)
                     num = __CONFIG.get_config()["Text_Chat_Messages"]["num_of_messages"]
-                    use_old_system = __CONFIG.get_config()["Advanced"]["use_old_messages"]
-                    messages = get_messages(num=num, use_old_messages=use_old_system)
+                    messages = get_messages(num=num, limit_messages=__CONFIG.get_config()["Advanced"]["limit_messages"])
                     for message in messages:
                         __MNK.send_text(active, text=message, all_chat_key=__CONFIG.get_config()["Text_Chat_Messages"]["all_chat_key"])
                         time.sleep(get_random_time(1.5, 2.5))
                     last_message = time.time()
 
         elif state["end_of_game"]:
-            if state["squad_leader"]:
-                # Press new match with squad if found to be in a squad as the squad leader
-                __MNK.select_button(active, x_coord=1652, y_coord=1023, sleep_range=(3.5, 4.5))
-                __MNK.select_button(active, x_coord=736, y_coord=985)
-            elif state["ready_up"]:
-                # Press ready up if found to be in a squad, but not the squad leader
-                __MNK.select_button(active, x_coord=1677, y_coord=1027)
-                # move mouse randomly until in a game
-                for x in range(random.randint(5, 10)):
-                    __MNK.move_mouse(active, x=get_coord(coord_type="x"), y=get_coord(coord_type="y"))
-            else:
-                # Press find another match if found to not be in a squad
-                __MNK.select_button(active, x_coord=1370, y_coord=1026)
+            # Press find another match
+            __MNK.select_button(active, x_coord=button_coords["end_of_game"][0][0], y_coord=button_coords["end_of_game"][0][1])
 
         time.sleep(get_random_time(2.5, 3.5)) # this sleep timer is mainly for older computers with worse graphics, but it's also useful for the state detection
-        CRASH_DETECTED = True # Reset the variable to make the Crash Prevention work.
 
 class Threads:
     def __init__(self) -> None:
@@ -216,6 +219,13 @@ if __name__ == "__main__":
             os.system("cls")
         except:
             clean_exit("[ERROR] Failed to install Tesseract OCR... Run the R6 AFK Bot to attempt the install again. If it still fails, manually download the installer from https://github.com/UB-Mannheim/tesseract/wiki, while leaving everything as default.")
+
+    # Create the READ_IMPORTANT file if it doesn't exist
+    if not os.path.exists("./READ_IMPORTANT.txt"):
+        with open("./READ_IMPORTANT.txt", "w") as f:
+            data = open(get_file_path("assets/READ_IMPORTANT.txt")).read()
+            f.write(data)
+        os.system("notepad.exe ./READ_IMPORTANT.txt")
 
     print(f'v{VERSION}')
     print(f'Resolution: {SCREEN_WIDTH}x{SCREEN_HEIGHT}')
