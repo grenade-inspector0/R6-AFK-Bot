@@ -74,3 +74,5 @@ Hello, the simple answer to what the future plans of this project is that I'll n
     - The original code that this project was based upon. I ended up editing / removing most of his code, but it's his base code at the heart, so he deserves some credit. 
 - [Tesseract](https://github.com/UB-Mannheim/tesseract/wiki)
     - The backbone of this project, used for the state detection of the R6 AFK Bot.
+- [Bobby]()
+    - Fixed a few things, and got me to provide another update.
