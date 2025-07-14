@@ -1,3 +1,16 @@
+# The Future of This Project
+Hello, the simple answer to what the future plans of this project is that I'll no longer provide support for it, nor give any updates.
+- Why?
+   - I have lost interest in this project, as I have recoded it multiple times (the source code to those versions have since been lost) and have mainly worked solo on this project.
+- Can I (meaning you) continue this project?
+   - Yes, simply fork the repository and edit my code from there, but I ask that you give me credit by either mentioning me or link to this repository.
+- How can I update it in order for it to work?
+   - You'd need to do one of two things:
+      - 1.) Rewrite the logic system to make it easier to update between manjor in-game menu changes.
+      - 2.) Manually go through and re-record all past coords, while updating the keywords for each coord as well.
+
+     Either way it will be annoying to do, and I personally wouldn't bother with it, especially #2. This is because my code might be a bit hard to understand at certain points, or the coords could be scattered and not in a central location as I had tried to do in the later versions. 
+
 ## R6 AFK Bot
 - What is this?
     - This is an application for Rainbow Six Siege to farm levels, renown, improve reputation, or remove reputation related penalties.
@@ -61,5 +74,5 @@
     - The original code that this project was based upon. I ended up editing / removing most of his code, but it's his base code at the heart, so he deserves some credit. 
 - [Tesseract](https://github.com/UB-Mannheim/tesseract/wiki)
     - The backbone of this project, used for the state detection of the R6 AFK Bot.
-- [Bobby]()
+- Bobby (Member in the Discord)
     - Fixed a few things, and got me to provide another update.
