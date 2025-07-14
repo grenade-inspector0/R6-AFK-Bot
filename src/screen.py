@@ -18,7 +18,7 @@ coords = {
 }
 
 button_coords = {
-    "lobby": [(132, 71), (130, 876), (122, 986), (407, 531), (740, 531), (1100, 531)],
+    "lobby": [(132, 71), (130, 876), (122, 986), (1100, 531), (740, 531), (407, 531)],
     "end_of_game": (1316, 1022),
     "popups": [(744, 946), (769, 987)]
 }
@@ -109,8 +109,6 @@ def read_screenshot(screen_coords=None, keyword=None):
     if screen_coords != None and keyword != None:
         take_screenshot((get_res_scale_x(screen_coords[0]), get_res_scale_y(screen_coords[2]), get_res_scale_x(screen_coords[1]), get_res_scale_y(screen_coords[3])))
         result = pytesseract.image_to_string(Image.open(f'{os.environ.get('TEMP')}\\temp.png'))
-        # DEBUG
-        print(result)
         if keyword in result.lower():
             return True
         else:

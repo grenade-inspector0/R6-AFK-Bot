@@ -7,14 +7,14 @@ import keyboard
 import threading
 from src.config import __CONFIG
 from src.mnk import MouseAndKeyboard
-from src.__init__ import GAMEMODE_INDEXS, clean_exit, get_file_path
 from src.active import SIEGE_WINDOW_NAMES, ActiveManager
+from src.__init__ import GAMEMODE_INDEXS, clean_exit, get_file_path
 from src.screen import SCREEN_WIDTH, SCREEN_HEIGHT, button_coords, detect_state
 from src.randomness import get_actions, get_coord, get_direction, get_messages, get_random_time
 
 
 
-VERSION = 3.3
+VERSION = 3.31
 
 USER32 = ctypes.windll.user32
 USER32.SetProcessDPIAware()
@@ -92,7 +92,7 @@ def AFK_Bot():
         
         elif state["reconnect"]:
             # reconnect to the game then sleep until in the game
-            __MNK.select_button(active, x_coord=button_coords["lobby"][1][0], y_coord=button_coords["lobby"][1][0], sleep_range=(15, 16))
+            __MNK.select_button(active, x_coord=button_coords["lobby"][1][0], y_coord=button_coords["lobby"][1][1], sleep_range=(15, 16))
         
         elif state["in_lobby"]:
             # move mouse to the main menu
@@ -100,11 +100,11 @@ def AFK_Bot():
 
             if not __CONFIG.get_config()["Mode_Selection"]["enabled"]:
                 # press play again
-                __MNK.select_button(active, x_coord=button_coords["lobby"][1][0], y_coord=button_coords["lobby"][1][0], sleep_range=(7.5, 7.6))
+                __MNK.select_button(active, x_coord=button_coords["lobby"][1][0], y_coord=button_coords["lobby"][1][1], sleep_range=(7.5, 7.6))
                 continue
-
+            
             # open the menu to select a gamemode
-            __MNK.select_button(active, x_coord=button_coords["lobby"][2][0], y_coord=button_coords["lobby"][2][0], sleep_range=(7.5, 7.6))
+            __MNK.select_button(active, x_coord=button_coords["lobby"][2][0], y_coord=button_coords["lobby"][2][1], sleep_range=(7.5, 7.6))
 
             try:
                 index = GAMEMODE_INDEXS[__CONFIG.get_config()["Mode_Selection"]["gamemode"].lower().strip()]
@@ -112,7 +112,7 @@ def AFK_Bot():
                 index = random.choice([i for n, i in GAMEMODE_INDEXS.items()])
 
             # select the user's gamemode
-            __MNK.select_button(active, x_coord=button_coords["lobby"][index][0], y_coord=button_coords["lobby"][index][0], sleep_range=(7.5, 7.6))
+            __MNK.select_button(active, x_coord=button_coords["lobby"][index][0], y_coord=button_coords["lobby"][index][1], sleep_range=(7.5, 7.6))
 
         elif state["queueing"]:
             # move mouse randomly until in a game
