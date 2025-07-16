@@ -48,6 +48,3 @@ def get_messages(num=1, limit_messages=False):
             continue
         error_count += 1
     return messages
-
-def get_random_time(start_range=0.3, end_range=0.5):
-    return random.uniform(random.uniform(start_range, start_range*random.choice([1.05, 1.1, 1.15, 1.2])), random.uniform(end_range*random.choice([0.5, 0.6, 0.7, 0.8]), end_range))

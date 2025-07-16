@@ -9,12 +9,12 @@ from src.config import __CONFIG
 from src.mnk import MouseAndKeyboard
 from src.active import SIEGE_WINDOW_NAMES, ActiveManager
 from src.__init__ import GAMEMODE_INDEXS, clean_exit, get_file_path
+from src.randomness import get_actions, get_coord, get_direction, get_messages
 from src.screen import SCREEN_WIDTH, SCREEN_HEIGHT, button_coords, detect_state
-from src.randomness import get_actions, get_coord, get_direction, get_messages, get_random_time
 
 
 
-VERSION = 3.31
+VERSION = 3.32
 
 USER32 = ctypes.windll.user32
 USER32.SetProcessDPIAware()
@@ -138,7 +138,7 @@ def AFK_Bot():
                             __MNK.move_mouse(active, x=get_coord(coord_type="x"), y=get_coord(coord_type="y"))
                             __MNK.keypress(active, key=get_direction(), duration=0)
 
-                time.sleep(get_random_time(0.8, 1.2))
+                time.sleep(random.uniform(0.8, 1.2))
 
             if __CONFIG.get_config()["Text_Chat_Messages"]["enabled"]:
                 message_interval = __CONFIG.get_config()["Advanced"]["message_interval"]
@@ -147,14 +147,14 @@ def AFK_Bot():
                     messages = get_messages(num=num, limit_messages=__CONFIG.get_config()["Advanced"]["limit_messages"])
                     for message in messages:
                         __MNK.send_text(active, text=message, all_chat_key=__CONFIG.get_config()["Text_Chat_Messages"]["all_chat_key"])
-                        time.sleep(get_random_time(1.5, 2.5))
+                        time.sleep(random.uniform(1.5, 2.5))
                     last_message = time.time()
 
         elif state["end_of_game"]:
             # Press find another match
             __MNK.select_button(active, x_coord=button_coords["end_of_game"][0][0], y_coord=button_coords["end_of_game"][0][1])
 
-        time.sleep(get_random_time(2.5, 3.5)) # this sleep timer is mainly for older computers with worse graphics, but it's also useful for the state detection
+        time.sleep(random.uniform(2.5, 3.5)) # this sleep timer is mainly for older computers with worse graphics, but it's also useful for the state detection
 
 class Threads:
     def __init__(self) -> None:

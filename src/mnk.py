@@ -4,7 +4,6 @@ import random
 import keyboard
 import pydirectinput
 from src.active import ActiveManager
-from src.randomness import get_random_time
 from src.screen import get_res_scale_x, get_res_scale_y
 
 win32 = ctypes.windll.user32
@@ -50,11 +49,11 @@ class MouseAndKeyboard:
         sleep_range = kwargs.get('sleep_range')
 
         win32.mouse_event(0x0002, 0, 0, 0, 0) # Left click press
-        time.sleep(get_random_time(0.1, 0.15))
+        time.sleep(random.uniform(0.1, 0.15))
         win32.mouse_event(0x0004, 0, 0, 0, 0) # Left click release
 
         if any(sleep_range):
-            time.sleep(get_random_time(*sleep_range))
+            time.sleep(random.uniform(*sleep_range))
 
     def keypress(self, active, **kwargs):
         """ Presses given key.
@@ -70,7 +69,7 @@ class MouseAndKeyboard:
         
         if key is not None:
             keyboard.press(key)
-            time.sleep(get_random_time(0.75, 1.5)) if kwargs.get('duration') == 0 else kwargs.get('duration')
+            time.sleep(random.uniform(0.75, 1.5)) if kwargs.get('duration') == 0 else kwargs.get('duration')
             keyboard.release(key)
         
         keyboard.release("shift") if hold_shift else ""
@@ -85,21 +84,21 @@ class MouseAndKeyboard:
 
         if text is not None:
             keyboard.press(all_chat_key)
-            time.sleep(get_random_time(0.1, 0.15))
+            time.sleep(random.uniform(0.1, 0.15))
             keyboard.release(all_chat_key)
 
             keyboard.press("backspace")
-            time.sleep(get_random_time(0.1, 0.15))
+            time.sleep(random.uniform(0.1, 0.15))
             keyboard.release("backspace")
 
-            keyboard.write(text, get_random_time(0.1, 0.15))
+            keyboard.write(text, random.uniform(0.1, 0.15))
 
             keyboard.press("enter")
-            time.sleep(get_random_time(0.1, 0.15))
+            time.sleep(random.uniform(0.1, 0.15))
             keyboard.release("enter")
 
             keyboard.press("enter")
-            time.sleep(get_random_time(0.1, 0.15))
+            time.sleep(random.uniform(0.1, 0.15))
             keyboard.release("enter")
     
     def write_text(self, active, **kwargs):
@@ -107,12 +106,12 @@ class MouseAndKeyboard:
         self.__action(active, self.__write_text, **kwargs)
 
     def __write_text(self, **kwargs):
-        keyboard.write(kwargs.get('text'), get_random_time(0.1, 0.15))
+        keyboard.write(kwargs.get('text'), random.uniform(0.1, 0.15))
 
     def drag_mouse(self, target_x, target_y):
         win32.mouse_event(0x0002, 0, 0, 0, 0) # Left click press
-        pydirectinput.moveTo(target_x, target_y, duration=get_random_time(0.5, 1.5))
-        time.sleep(get_random_time(0.1, 0.15))
+        pydirectinput.moveTo(target_x, target_y, duration=random.uniform(0.5, 1.5))
+        time.sleep(random.uniform(0.1, 0.15))
         win32.mouse_event(0x0004, 0, 0, 0, 0) # Left click release
 
     def move_mouse(self, active, **kwargs):
@@ -123,7 +122,7 @@ class MouseAndKeyboard:
         x = kwargs.get('x')
         y = kwargs.get('y')
 
-        time.sleep(get_random_time(0.1, 0.15))
+        time.sleep(random.uniform(0.1, 0.15))
 
         if x is not None and y is not None:
             pydirectinput.moveTo(get_res_scale_x(x), get_res_scale_y(y))
