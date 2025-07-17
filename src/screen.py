@@ -12,7 +12,7 @@ coords = {
     "lobby": [(85, 231, 836, 925), (208, 318, 52, 90), (374, 450, 52, 90)],
     "queueing": [(808, 1026, 38, 68), (862, 987, 36, 64), (87, 188, 850, 915)],
     "end_of_game": (1206, 1435, 982, 997),
-    "popups": [(689, 1221, 924, 955), (664, 732, 963, 996), (679, 1197, 173, 260), (685, 943, 909, 1008), (622, 773, 938, 1000), (689, 963, 176, 245)],
+    "popups": [(689, 1221, 924, 955), (664, 732, 963, 996), (679, 1197, 173, 260), (685, 943, 909, 1008), (685, 975, 930, 1012), (622, 773, 938, 1000), (689, 963, 176, 245)],
     "reconnect": (875, 1070, 40, 70),
     "ban_check": (655, 1045, 38, 68)
 }
@@ -60,7 +60,7 @@ keywords = {
 
 
 # popups :
-0 - normal_popup : Popups that appear often; "Failed to connect to server", "Reconnect", etc.
+0 - normal_popup : Popups that appear often; "Failed to connect to server", etc.
 1 - badge_popup : Popup that appears when you get a badge 
 2 - reputation_popup : Popup that appears when you get a reputation drop
 3 - advertising_popups : Popup(s) that appear when the game wants to you to buy an item from the shop
@@ -151,17 +151,18 @@ def detect_state():
     if not state["popup"][0]:
         for x in range(1, len(keywords["popups"])):
             if not state["popup"][0]:
-                state["popup"] = (True, "normal") if read_screenshot(coords["popups"][5], keywords["popups"][x]) else (False, None)
+                state["popup"] = (True, "normal") if read_screenshot(coords["popups"][6], keywords["popups"][x]) else (False, None)
             if state["popup"][0]:
                 break
 
-    # Other Popups (Badge Popups, Reputation Popups, Advertising Popups, etc.)
+    # Other Popups (Badge Popups, Reputation Popups, Advertising Popups, Reconnect Popup, etc.)
     if not state["popup"][0]:
         popups = [
             read_screenshot(coords["popups"][1], keywords["popups"][2]), # Badge Popup
             read_screenshot(coords["popups"][2], keywords["popups"][7]), # Reputation Popup
             read_screenshot(coords["popups"][3], keywords["popups"][2]), # Advertising Popup
-            read_screenshot(coords["popups"][4], keywords["popups"][2]) # Misc. Popup
+            read_screenshot(coords["popups"][4], keywords["popups"][2]), # Reconnect Popup
+            read_screenshot(coords["popups"][5], keywords["popups"][2])  # Misc. Popup
         ]
 
         state["popup"] = (True, "other") if True in popups else (False, None)
