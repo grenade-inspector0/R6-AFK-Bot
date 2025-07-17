@@ -28,17 +28,6 @@
    - "python compile.py"
 6. Follow steps 2-5 outlined in the Quick Setup section.
 
-## Config
-- Text_Chat_Messages
-    - "enabled" : Enable the R6 AFK Bot to type postiive messages
-    - "all_chat_key" : The key the R6 AFK Bot will press to open the chat (either all chat or team chat)
-    - "num_of_messages" : The number of messages the R6 AFK Bot will type every time it's time to type.
-- Advanced
-    - "siege_path" : The path the crash detection will run if and when your game crashes.
-       - Should be the path to the file called, "RainbowSix.exe", where your game's installed at.
-    - "use_old_messages" : Will enable the use of the old positive message system.
-        - Type, "true" to enable, and "false" to use the new message system. 
-
 ## IMPORTANT
 1. Widescreen monitors are **NOT** supported. The only way to use a widescreen monitor with my program is to open Nvidia Control Panel and set your resolution to 1920x1080. 
 2. Botting bans happen a lot than they used to, so to avoid this do the following:
