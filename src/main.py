@@ -40,7 +40,7 @@ def start_siege():
             __ACTIVE.switch_active()
             __THREADS.stop()
             clean_exit("[ERROR] R6 AFK Bot failed to restart siege, manual intervention needed.")
-        current_state = detect_state(__ACTIVE, __MNK)
+        current_state = detect_state()
         current_state = [current_state["in_lobby"], current_state["reconnect"], current_state["popup"][0]]
         if True in current_state:
             # Maximize the game, then return
