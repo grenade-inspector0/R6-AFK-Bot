@@ -40,11 +40,7 @@ def get_messages(num=1, limit_messages=False):
         positive_messages = [line.strip() for line in open(get_file_path("assets/messages.txt"), 'r').readlines()]
     
     # Randomly selected the inputted number of messages
-    error_count = 0
-    while len(messages) < num or error_count < 3:
+    for x in range(num):
         new_message = random.choice(positive_messages)
-        if new_message not in messages:
-            messages.append(new_message)
-            continue
-        error_count += 1
+        messages.append(new_message)
     return messages
