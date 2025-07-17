@@ -52,3 +52,5 @@
     - The backbone of this project, used for the state detection of the R6 AFK Bot.
 - Bobby (Member in the Discord)
     - Fixed a few things, and got me to provide another update.
+- TeamHelper (Member in the Discord)
+    - Helped me fix a bug.
