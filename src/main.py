@@ -73,10 +73,8 @@ def AFK_Bot():
             start_siege() if CRASH_DETECTED else "" # Start the game if a Crash is detected
             CRASH_DETECTED = True # Reset the variable to make the Crash Detection work.
         
-        if state["banned"] or state["sanctioned"]:
+        if state["banned"]:
             # If the account is banned, then exit
-            __ACTIVE.switch_active()
-            __THREADS.stop()
             clean_exit(f"Ban Detected.\nR6 AFK Bot Deactivated.")
 
         elif state["sanctioned"]:
