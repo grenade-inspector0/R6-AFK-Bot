@@ -14,7 +14,7 @@ from src.screen import SCREEN_WIDTH, SCREEN_HEIGHT, button_coords, detect_state
 
 
 
-VERSION = 3.32
+VERSION = 3.33
 
 USER32 = ctypes.windll.user32
 USER32.SetProcessDPIAware()
